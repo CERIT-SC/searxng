@@ -70,6 +70,7 @@ def request(query: str, params: "OnlineParams") -> None:
             "term": query,
             "retstart": (params["pageno"] - 1) * page_size,
             "retmax": page_size,
+            "sort": "relevance",
         }
     )
     esearch_url = f"{eutils_api}/esearch.fcgi?{args}"
