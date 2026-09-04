@@ -41,28 +41,27 @@ about = {
     "wikidata_id": "Q38352586",
     "official_api_documentation": "https://unpaywall.org/products/api",
     "use_official_api": True,
-    "require_api_key": True,
+    "require_api_key": False,
     "results": "JSON",
 }
 
 categories = ["science", "scientific publications"]
 
 # engine dependent config
-paging = False
+paging = True
 search_url = "https://api.unpaywall.org/v2"
 
-# required by the Unpaywall API: set your email address in settings.yml (api_key)
-api_key = None
+# set your email address
+email = None
 
 
 def request(query: str, params: "OnlineParams") -> None:
-    if not api_key:
-        # the API requires an email address, without it it answers with 422
-        raise SearxEngineAPIException("no email address configured (api_key)")
+    if not email:
+        raise SearxEngineAPIException("Email address required.")
 
     # the query is the identifier (DOI or URL) and part of the path, so percent-encode it
     params["raise_for_httperror"] = False
-    params["url"] = f"{search_url}/{quote(query.strip(), safe='')}?{urlencode({'email': api_key})}"
+    params["url"] = f"{search_url}/{quote(query.strip(), safe='')}?{urlencode({'email': email})}"
 
 
 def response(resp: "SXNG_Response") -> EngineResults:
