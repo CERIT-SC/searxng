@@ -1849,7 +1849,6 @@ engines:
     # Recommended by OpenAlex: join the polite pool with an email address
     # mailto: "[email protected]"
     timeout: 5.0
-    disabled: true
 
   - name: openclipart
     engine: openclipart
