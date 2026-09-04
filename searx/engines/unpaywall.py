@@ -51,17 +51,17 @@ categories = ["science", "scientific publications"]
 paging = True
 search_url = "https://api.unpaywall.org/v2"
 
-# set your email address
-email = None
+# set your email address here
+api_key = None
 
 
 def request(query: str, params: "OnlineParams") -> None:
-    if not email:
+    if not api_key:
         raise SearxEngineAPIException("Email address required.")
 
     # the query is the identifier (DOI or URL) and part of the path, so percent-encode it
     params["raise_for_httperror"] = False
-    params["url"] = f"{search_url}/{quote(query.strip(), safe='')}?{urlencode({'email': email})}"
+    params["url"] = f"{search_url}/{quote(query.strip(), safe='')}?{urlencode({'email': api_key})}"
 
 
 def response(resp: "SXNG_Response") -> EngineResults:
