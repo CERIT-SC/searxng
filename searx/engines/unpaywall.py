@@ -1,20 +1,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""`Unpaywall`_ is a free API that finds legal, open access (OA) versions of
-scholarly works.  Unlike the other scientific publication engines, Unpaywall is
-a *lookup* API: it does not search, but resolves a single DOI or article URL to
-its open access status and links (publisher or repository version).
-
-The query is therefore interpreted as a DOI (e.g. ``10.1371/journal.pone.0000001``)
-or as an article URL.  To find papers by keywords use one of the search engines,
-e.g. :ref:`europepmc engine` or :ref:`openalex engine`, and pass the DOI or URL
-of a result to Unpaywall to locate its OA copy.
-
-Results are only shown when an open access copy exists (``is_oa``); otherwise
-the engine returns no results, which is exactly the answer to "is this
-paywalled?".
+"""`Unpaywall`_ is a free database and tool that helps researchers find legal, 
+open-access versions of scholarly articles. It searches across repositories 
+and publishers to locate freely available full-text papers.
 
 .. _Unpaywall: https://unpaywall.org/
-.. _Unpaywall API: https://unpaywall.org/products/api
 
 Configuration
 =============
@@ -26,18 +15,7 @@ Configuration
      shortcut: upw
      api_key: "you@your-domain.org"
 
-Notes
------
-
-- An email address is required by the `Unpaywall API`_ (passed as the ``email``
-  parameter); requests without a valid email are rejected with HTTP 422.  Set it
-  as ``api_key`` in :origin:`settings.yml <searx/settings.yml>`.
-- Queries that are neither a valid DOI nor a known URL return HTTP 404 and are
-  silently skipped.
-- The main result URL is the open access location (PDF if available, otherwise
-  the landing page), the DOI link is exposed as the HTML link in the result
-  footer.
-
+     
 Implementations
 ===============
 
