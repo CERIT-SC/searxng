@@ -43,7 +43,6 @@ Implementations
 
 """
 
-import re
 import typing as t
 
 from datetime import datetime
@@ -74,9 +73,6 @@ categories = ["science", "scientific publications"]
 paging = False
 search_url = "https://api.unpaywall.org/v2"
 
-# the identifier (DOI or URL) is part of the path, so only percent-encode it
-DOI_PATTERN = re.compile(r"\b10\.\d{4,9}/\S+")
-
 # required by the Unpaywall API: set your email address in settings.yml (api_key)
 api_key = None
 
@@ -86,33 +82,9 @@ def request(query: str, params: "OnlineParams") -> None:
         # the API requires an email address, without it it answers with 422
         raise SearxEngineAPIException("no email address configured (api_key)")
 
-    identifier = _extract_identifier(query)
-    if identifier is None:
-        # not a DOI or URL -> the API would only answer with 404, skip the request
-        return
-
-    # let the engine answer with 404 for unknown identifiers
+    # the query is the identifier (DOI or URL) and part of the path, so percent-encode it
     params["raise_for_httperror"] = False
-    params["url"] = f"{search_url}/{quote(identifier, safe='')}?{urlencode({'email': api_key})}"
-
-
-def _extract_identifier(query: str) -> str | None:
-    """Extract the DOI or article URL from the query.
-
-    A DOI is preferred; if the query only contains a DOI within a longer citation,
-    the DOI is extracted from it.  Otherwise a URL is used, as the API also accepts
-    (percent-encoded) article URLs.  Returns ``None`` if neither is found."""
-    query = query.strip()
-
-    # DOI anywhere in the query (e.g. within a longer citation); strip trailing
-    # punctuation that is not part of the DOI itself
-    if match := DOI_PATTERN.search(query):
-        return match.group().rstrip(".,;:)]}")
-
-    if query.startswith(("http://", "https://")):
-        return query
-
-    return None
+    params["url"] = f"{search_url}/{quote(query.strip(), safe='')}?{urlencode({'email': api_key})}"
 
 
 def response(resp: "SXNG_Response") -> EngineResults:
