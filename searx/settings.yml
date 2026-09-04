@@ -2551,6 +2551,11 @@ engines:
     engine: unsplash
     shortcut: us
 
+  - name: unpaywall
+    engine: unpaywall
+    shortcut: upw
+    api_key: test1233456@test.cz
+
   - name: unobtanium
     engine: xpath
     shortcut: uno
