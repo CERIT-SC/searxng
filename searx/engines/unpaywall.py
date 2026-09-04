@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""Unpaywall_ is a free API that finds legal, open access (OA) versions of
+"""`Unpaywall`_ is a free API that finds legal, open access (OA) versions of
 scholarly works.  Unlike the other scientific publication engines, Unpaywall is
 a *lookup* API: it does not search, but resolves a single DOI or article URL to
 its open access status and links (publisher or repository version).
