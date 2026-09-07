@@ -2554,7 +2554,7 @@ engines:
   - name: unpaywall
     engine: unpaywall
     shortcut: upw
-    api_key: test1233456@test.cz
+    mailto: test1233456@test.cz
 
   - name: unobtanium
     engine: xpath

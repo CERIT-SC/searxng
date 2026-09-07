@@ -40,7 +40,7 @@ about = {
     "wikidata_id": "Q38352586",
     "official_api_documentation": "https://unpaywall.org/products/api",
     "use_official_api": True,
-    "require_api_key": True,
+    "require_api_key": False,
     "results": "JSON",
 }
 
@@ -49,11 +49,11 @@ categories = ["science", "scientific publications"]
 # engine dependent config
 paging = False
 search_url = "https://api.unpaywall.org/v2"
-api_key = None
+mailto = None
 
 
 def request(query: str, params: "OnlineParams") -> None:
-    params["url"] = f"{search_url}/{quote(query.strip(), safe='')}?{urlencode({'email': api_key})}"
+    params["url"] = f"{search_url}/{quote(query.strip(), safe='')}?{urlencode({'email': mailto})}"
 
 
 def response(resp: "SXNG_Response") -> EngineResults:
