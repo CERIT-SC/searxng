@@ -28,7 +28,6 @@ from urllib.parse import quote, urlencode
 
 from dateutil.parser import isoparse
 
-from searx.exceptions import SearxEngineAPIException
 from searx.result_types import EngineResults
 
 if t.TYPE_CHECKING:
