@@ -181,7 +181,7 @@ sc_code_cache_sec = 3600
 """Time in seconds the sc-code is cached in memory :py:obj:`get_sc_code`."""
 
 # startpage's anubis difficulty is set to 4
-max_difficulty = 4
+max_difficulty = 5
 
 
 def _solve_anubis(resp) -> str:
