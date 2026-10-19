@@ -26,8 +26,6 @@ networkPolicy:
   allowedNamespaces: []
   #  - litellm
 
-# Source ranges for the Traefik ipAllowList middleware.
-allowedIPs: []
 
 searxng:
   baseUrl: "/"
