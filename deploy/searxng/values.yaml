@@ -17,7 +17,16 @@ ingress:
   enabled: true
 
 networkPolicy:
+  # Restrict ingress to the ingress gateway namespace. Set false for
+  # in-cluster-only access without a NetworkPolicy.
   enabled: false
+  # Additional namespaces allowed to reach the HTTP port (besides kube-system,
+  # where the ingress gateway runs). Matches the automatic
+  # kubernetes.io/metadata.name namespace label.
+  allowedNamespaces: []
+  #  - litellm
+
+# Source ranges for the Traefik ipAllowList middleware.
 allowedIPs: []
 
 searxng:
