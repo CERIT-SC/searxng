@@ -1,0 +1,23 @@
+{{- if .Values.ingress.enabled }}
+{{- $host := include "app.host" . -}}
+{{ .Chart.Name }} is deployed.
+
+  MCP endpoint:  https://{{ $host }}/mcp
+  Health:        https://{{ $host }}/health
+
+  Authenticate every request with the token from values (auth.token):
+    Authorization: Bearer <token>
+
+  Connect example (Claude Code / any MCP HTTP client):
+    url: https://{{ $host }}/mcp
+    headers:
+      Authorization: Bearer <token>
+{{- else }}
+{{ .Chart.Name }} is deployed without ingress (ingress.enabled=false).
+
+  Cluster-internal MCP endpoint:
+    http://{{ include "app.fullname" . }}.{{ .Release.Namespace }}.svc:{{ .Values.service.port }}/mcp
+
+  Authenticate every request with the token from values (auth.token):
+    Authorization: Bearer <token>
+{{- end }}
