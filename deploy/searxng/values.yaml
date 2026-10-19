@@ -11,7 +11,7 @@ image:
 nameOverride: ""
 fullnameOverride: ""
 
-host: searxng.dyn.cloud.e-infra.cz
+host: ""
 
 ingress:
   enabled: true
