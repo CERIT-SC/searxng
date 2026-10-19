@@ -1,0 +1,33 @@
+---
+replicaCount: 1
+
+image:
+  registry: cerit.io
+  repository: robindurnik/searxng
+  tag: dev
+  digest: ""
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+host: searxng.dyn.cloud.e-infra.cz
+
+ingress:
+  enabled: true
+
+networkPolicy:
+  enabled: false
+allowedIPs: []
+
+searxng:
+  baseUrl: "/"
+  secretKey: "secret"
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "256Mi"
+  limits:
+    cpu: "1"
+    memory: "512Mi"

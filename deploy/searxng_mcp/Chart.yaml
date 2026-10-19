@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mcp-searxng
+description: MCP server for SearXNG (HTTP transport), deployed per the cluster k8s conventions
+type: application
+version: 0.1.0
+appVersion: "2.1.0"
