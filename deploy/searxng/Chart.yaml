@@ -1,0 +1,8 @@
+---
+apiVersion: v2
+name: searxng
+version: 1.0.0
+description: "SearXNG - a privacy-respecting, hackable metasearch engine"
+home: https://github.com/searxng/searxng
+sources:
+  - https://github.com/searxng/searxng

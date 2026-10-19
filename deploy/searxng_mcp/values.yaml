@@ -1,0 +1,60 @@
+# Short host (no dot) expands to <host>.<release-namespace>.dyn.cloud.e-infra.cz.
+# A value containing a dot is used verbatim as an FQDN.
+host: mcp-searxng.dyn.cloud.e-infra.cz
+
+replicaCount: 1
+
+# Create external routing (HTTPRoute/Gateway) for `host`.
+# Set false for in-cluster-only access; no external URL is created.
+ingress:
+  enabled: true
+
+image:
+  repository: cerit.io/robindurnik/mcp-searxng
+  # Prefer a digest for reproducible rollouts (takes precedence over tag):
+  #   crane digest cerit.io/robindurnik/mcp-searxng:latest
+  digest: ""
+  tag: latest
+
+imagePullSecrets: []
+
+# SearXNG instance the MCP server queries.
+searxng:
+  url: https://searxng.dyn.cloud.e-infra.cz/
+
+# The app's own bearer-token authentication (MCP_HTTP_AUTH_TOKEN). Always on.
+auth:
+  # Required. Clients authenticate with: Authorization: Bearer <token>
+  token: "neco"
+
+containerPort: 8080
+
+service:
+  port: 8080
+
+# Extra Origin/Host values beyond the resolved FQDN (e.g. an MCP client UI).
+extraAllowedOrigins: []
+extraAllowedHosts: []
+
+networkPolicy:
+  # Additional namespaces allowed to reach the HTTP port (besides kube-system,
+  # where the ingress gateway runs). Matches the automatic
+  # kubernetes.io/metadata.name namespace label.
+  allowedNamespaces: []
+  #  - litellm
+
+extraEnv: 
+  - name: MCP_TRACE
+    value: "true"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: "1"
+    memory: 512Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

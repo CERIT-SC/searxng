@@ -1,0 +1,9 @@
+{{- /* templates/NOTES.txt */ -}}
+{{ .Chart.Name }} is deployed.
+
+  URL:  https://{{ include "searxng.host" . }}/
+
+  Allowed source IPs:
+{{- range .Values.allowedIPs }}
+    - {{ . }}
+{{- end }}

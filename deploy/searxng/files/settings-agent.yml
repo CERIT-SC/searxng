@@ -1,0 +1,304 @@
+# =============================================================================
+# SearXNG - Lean configuration tuned as an AI-agent search backend
+# =============================================================================
+# Goal: good, clean results with low latency and high reliability.
+#   - General category: Bing + Qwant + Startpage (reliable, no rate limits)
+#   - DuckDuckGo removed (persistent CAPTCHA challenges)
+#   - Brave removed (persistent "too many requests" rate limiting)
+#   - Mojeek removed (persistent "access denied" blocking)
+#   - Crypto results filtered via hostnames plugin blocklist
+#   - Knowledge shown as infoboxes, not result spam
+#   - Specialist engines are category-gated (don't fire on normal queries)
+#   - JSON output enabled for the agent
+#
+# Drop at: /etc/searxng/settings.yml
+# =============================================================================
+
+use_default_settings:
+  engines:
+    keep_only:
+      - bing
+      - bing news
+      - startpage
+      - wikipedia
+      - wikidata
+      - github
+      - stackoverflow      # served by the "stackexchange" engine in defaults
+      - arxiv
+      - pubmed
+      - europepmc
+      - semantic scholar
+      - openalex
+      - crossref
+      - arxiv
+      - unpaywall
+      - annas archive
+      - duckduckgo
+      - startpage
+      - yahoo
+      - seznam
+
+general:
+  debug: false
+  instance_name: "SearXNG"
+  enable_metrics: true
+
+search:
+  safe_search: 1
+  autocomplete: ""
+  favicon_resolver: ""
+  default_lang: "auto"
+  ban_time_on_fail: 5
+  max_ban_time_on_fail: 120
+  formats:
+    - json
+    - html
+
+server:
+  port: 8080
+  bind_address: "0.0.0.0"
+  base_url: {{ include "searxng.baseUrl" . | quote }}
+  public_instance: false
+  secret_key: {{ required "searxng.secretKey must be set" .Values.searxng.secretKey | quote }}
+  image_proxy: false          # agent doesn't render images; save the bandwidth
+  http_protocol_version: "1.1"
+  method: "GET"
+  default_http_headers:
+    X-Content-Type-Options: nosniff
+    X-Download-Options: noopen
+    X-Robots-Tag: noindex, nofollow
+    Referrer-Policy: no-referrer
+
+ui:
+  default_theme: simple
+  default_locale: ""
+
+outgoing:
+  # Tight, predictable timeouts so one slow engine can't stall a query.
+  request_timeout: 4.0
+  max_request_timeout: 8.0
+  pool_connections: 100
+  pool_maxsize: 20
+  enable_http2: true
+
+# Keep only the lightweight, useful plugins. Unit/calculator/time answers
+# are cheap and occasionally handy for an agent; the rest add nothing here.
+plugins:
+  searx.plugins.calculator.SXNGPlugin:
+    active: true
+  searx.plugins.unit_converter.SXNGPlugin:
+    active: true
+  searx.plugins.time_zone.SXNGPlugin:
+    active: true
+  searx.plugins.tracker_url_remover.SXNGPlugin:
+    active: true
+  searx.plugins.oa_doi_rewrite.SXNGPlugin:
+    active: true
+  searx.plugins.self_info.SXNGPlugin:
+    active: false
+  searx.plugins.hash_plugin.SXNGPlugin:
+    active: false
+  searx.plugins.infinite_scroll.SXNGPlugin:
+    active: false
+  searx.plugins.ahmia_filter.SXNGPlugin:
+    active: false
+  searx.plugins.hostnames.SXNGPlugin:
+    active: true
+
+# Block cryptocurrency-related domains from appearing in any results.
+# This removes crypto spam (exchanges, trackers, wallets, DeFi, NFT, etc.)
+# from all search results regardless of query.
+hostnames:
+  remove:
+    # --- Crypto exchanges ---
+    - binance.com
+    - coinbase.com
+    - kraken.com
+    - bitfinex.com
+    - bitstamp.net
+    - gemini.com
+    - kucoin.com
+    - okx.com
+    - bybit.com
+    - gate.io
+    - mexc.com
+    - bitget.com
+    - crypto.com
+    - cex.io
+    - changelly.com
+    - bitflyer.com
+    - coincheck.com
+    - ftx.com
+    - bitmart.com
+    - bithumb.com
+    - upbit.com
+    - bingx.com
+    - poloniex.com
+    - bitmex.com
+    - coinex.com
+    - xt.com
+    - ascendex.com
+    - hitbtc.com
+    - etoro.com
+    # --- Crypto tracking / explorers ---
+    - coinmarketcap.com
+    - coingecko.com
+    - etherscan.io
+    - bscscan.com
+    - polygonscan.com
+    - snowtrace.io
+    - arbiscan.io
+    - optimistic.etherscan.io
+    - solscan.io
+    - blockchain.com
+    - blockchair.com
+    - blockstream.info
+    - mempool.space
+    - livecoinwatch.com
+    - coinlib.io
+    - cryptocompare.com
+    - coinpaprika.com
+    - messari.io
+    - coinlore.com
+    - worldcoinindex.com
+    - tokeninsight.com
+    # --- Crypto news / media ---
+    - coindesk.com
+    - cointelegraph.com
+    - decrypt.co
+    - theblock.co
+    - blockworks.co
+    - bitcoinist.com
+    - newsbtc.com
+    - cryptoslate.com
+    - cryptonews.com
+    - bitcoin.com
+    - bitcoinmagazine.com
+    - beincrypto.com
+    - crypto.news
+    # --- Crypto wallets ---
+    - metamask.io
+    - trustwallet.com
+    - phantom.app
+    - trezor.io
+    - ledger.com
+    - coinomi.com
+    - exodus.com
+    - myetherwallet.com
+    - mycrypto.com
+    # --- DeFi protocols ---
+    - uniswap.org
+    - pancakeswap.finance
+    - 1inch.io
+    - aave.com
+    - curve.fi
+    - balancer.fi
+    - yearn.fi
+    - sushiswap.org
+    - compound.finance
+    - makerdao.com
+    - oasis.app
+    - synthetix.io
+    # --- NFT marketplaces ---
+    - opensea.io
+    - looksrare.org
+    - blur.io
+    - foundation.app
+    - superrare.com
+    - rarible.com
+    - mintable.app
+    # --- Blockchain project sites ---
+    - ethereum.org
+    - bitcoin.org
+    - cardano.org
+    - polkadot.network
+    - solana.com
+    - avalanche.network
+    - polygon.technology
+    - algorand.org
+    - cosmos.network
+    - near.org
+    - tezos.com
+    - iota.org
+    - chain.link
+    - thegraph.com
+    - filecoin.io
+    - arweave.org
+    # --- Mining / pools ---
+    - bitcointalk.org
+    - cointracking.info
+    - miningpoolstats.stream
+    - 2miners.com
+    - f2pool.com
+    - antpool.com
+    - foundryusapool.com
+    - viabtc.com
+    - braiins.com
+    - nicehash.com
+    - whattomine.com
+    # --- Misc crypto services ---
+    - coinatmradar.com
+    - coinmama.com
+    - moonpay.com
+    - ramp.network
+    - transak.com
+    - simplex.com
+    - banxa.com
+    - kurzy.cz
+    # --- Crypto trading/charting platforms ---
+    - tradingview.com
+    - cointracking.com
+    - cryptohopper.com
+    - 3commas.io
+    - pionex.com
+    - bitsgap.com
+
+    # --- Additional crypto services discovered in testing ---
+    - investicniweb.cz
+    - goldengate.cz
+    - anycoin.cz
+    - tradingview.com
+
+categories_as_tabs:
+  general:
+  news:
+  it:
+  science:
+
+
+# ---------------------------------------------------------------------------
+# Per-engine overrides.
+# keep_only loads each engine with its DEFAULT config, so engines that ship
+# disabled must be re-enabled here. The rest are on by default.
+# ---------------------------------------------------------------------------
+engines:
+  - name: bing
+    disabled: false
+
+  - name: startpage
+    disabled: false
+
+  - name: annas archive
+    disabled: false
+
+  - name: wikipedia
+    display_type: ["infobox"]
+
+  - name: wikidata
+    weight: 2
+    display_type: ["infobox"]
+
+  - name: yahoo
+    disabled: false
+
+  - name: duckduckgo
+    timeout: 6.0
+    disabled: false
+  
+  - name: seznam
+    disabled: false
+  
+  - name: startpage
+    inactive: false
+
+
