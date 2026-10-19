@@ -20,7 +20,7 @@ imagePullSecrets: []
 
 # SearXNG instance the MCP server queries.
 searxng:
-  url: https://searxng.dyn.cloud.e-infra.cz/
+  url: ""
 
 # The app's own bearer-token authentication (MCP_HTTP_AUTH_TOKEN). Always on.
 auth:
