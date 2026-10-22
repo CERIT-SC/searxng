@@ -1,6 +1,6 @@
 # Short host (no dot) expands to <host>.<release-namespace>.dyn.cloud.e-infra.cz.
 # A value containing a dot is used verbatim as an FQDN.
-host: mcp-searxng.dyn.cloud.e-infra.cz
+host: ""
 
 replicaCount: 1
 
@@ -20,7 +20,7 @@ imagePullSecrets: []
 
 # SearXNG instance the MCP server queries.
 searxng:
-  url: ""
+  url: "http://searxng:8080/"
 
 # The app's own bearer-token authentication (MCP_HTTP_AUTH_TOKEN). Always on.
 auth:
